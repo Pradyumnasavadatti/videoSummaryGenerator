@@ -44,5 +44,5 @@ Make sure you have the following installed:
 Set your OpenAI API key as an environment variable:
 
 ```bash
-e
+export OPEN_AI_KEY=your_api_key_here
 ```
