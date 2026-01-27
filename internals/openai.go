@@ -3,7 +3,7 @@ package internals
 import (
 	"context"
 	"errors"
-	"log"
+	"fmt"
 	"os"
 
 	"github.com/openai/openai-go/v3"
@@ -11,7 +11,10 @@ import (
 )
 
 func CallOpenAi(transcriptedText string)(string,error){
-	log.Println("Getting summary from openai")
+	ctx, cancel := context.WithCancel(context.Background())	
+	defer cancel()
+	wg.Add(1)
+	go StartWithContext(ctx,&wg,"Getting summary from openai")
 	if apiKey,isPresent := os.LookupEnv("OPEN_AI_KEY"); isPresent{
 		client := openai.NewClient(option.WithAPIKey(apiKey))
 		prompt:= `
@@ -33,7 +36,9 @@ func CallOpenAi(transcriptedText string)(string,error){
 		if err!=nil{
 			panic(err)
 		}
-		log.Println("returning summary")
+		cancel()
+		wg.Wait()
+		fmt.Println("\u2713Generated the summary")
 		return res.Choices[0].Message.Content, nil;
 	}else{
 		return "",errors.New("No Open AI api key found")

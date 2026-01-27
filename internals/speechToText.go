@@ -3,8 +3,8 @@ package internals
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
-	"log"
 	"os"
 
 	"github.com/openai/openai-go/v3"
@@ -12,12 +12,16 @@ import (
 )
 
 func GetSpeechToText(fileName string) (string, error){
-	log.Println("Inside speech to text") 
+	fmt.Println("Inside speech to text")
 	filePtr,err := os.Open(fileName)
 	if err!=nil{
 		return "", errors.New("File not found")
 	}
 	defer filePtr.Close()
+	ctx2, cancel2 := context.WithCancel(context.Background())	
+	wg.Add(1)
+	go StartWithContext(ctx2,&wg,"Calling Wisper for audio transcripts")
+	defer cancel2()
 	filePtr.Seek(0, io.SeekStart)
 	if apiKey, isPresent := os.LookupEnv("OPEN_AI_KEY"); isPresent{
 		client := openai.NewClient(option.WithAPIKey(apiKey))
@@ -28,7 +32,9 @@ func GetSpeechToText(fileName string) (string, error){
 		if err!=nil{
 			return "",err
 		}
-		log.Println("returning transcripts")
+		cancel2()
+		wg.Wait()
+		fmt.Println("\u2713Received the transcripts")
 		return response.Text, nil
 	}else{
 		return "", errors.New("No api key found")

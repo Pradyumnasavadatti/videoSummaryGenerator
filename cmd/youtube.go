@@ -1,8 +1,9 @@
 package cmd
 
 import (
+	"context"
+	"fmt"
 	"io"
-	"log"
 	"os"
 	"vidSummary/internals"
 
@@ -15,7 +16,10 @@ var youtubeCmd = &cobra.Command{
 	Short: "To generate summary of youtube video",
 	Long: "By given youtube video id or link, summary of the video will be generated",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Println("Getting youtube video")
+		ctx,cancel := context.WithCancel(context.Background())
+		defer cancel()
+		wg.Add(1)
+		go internals.StartWithContext(ctx,&wg,"Getting youtube video")
 		client := youtube.Client{}
 
 		vid, err := client.GetVideo(vidLocation);
@@ -35,8 +39,9 @@ var youtubeCmd = &cobra.Command{
 		}
 		defer stream.Close()
 
-		log.Println("Saving youtube audio file")
-
+		cancel()
+		wg.Wait()
+		fmt.Println("\u2713Saving youtube audio file")
 		fptr ,err := os.Create(audioName)
 		if err!=nil{
 			panic(err)
@@ -48,7 +53,7 @@ var youtubeCmd = &cobra.Command{
 		if err!=nil{
 			panic(err)
 		}
-		log.Println("Audio file created")
+		fmt.Println("\u2713Audio file created")
 		err = internals.ComposeSummary(audioName,summaryName)
 		if err!=nil{
 			panic(err)

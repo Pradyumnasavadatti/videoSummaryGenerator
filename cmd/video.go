@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"log"
+	"context"
+	"fmt"
 	"os"
 	"os/exec"
 	"vidSummary/internals"
@@ -14,8 +15,11 @@ var videoCmd = &cobra.Command{
 	Short: "Summarize the video from the local",
 	Long: "Takes video from the local and summarizes it",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Println("Executing ffmpeg")
-		cmdToExec := exec.Command("ffmpeg","-i",vidLocation,"-vn","-ac","1","-ar","16000","-c:a","libmp3lame","-b:a","64k","-y",audioName)
+		ctx,cancel := context.WithCancel(context.Background())
+		defer cancel()
+		wg.Add(1)
+		go internals.StartWithContext(ctx,&wg,"Executing ffmpeg command to extract audio...")
+		cmdToExec := exec.Command("ffmpeg","-hide_banner","-loglevel","quiet","-i",vidLocation,"-vn","-ac","1","-ar","16000","-c:a","libmp3lame","-b:a","64k","-y",audioName)
 
 		cmdToExec.Stdin = os.Stdin
 		cmdToExec.Stderr = os.Stderr
@@ -25,7 +29,9 @@ var videoCmd = &cobra.Command{
 		if err!=nil{
 			panic(err)
 		}
-		log.Println("Audio file created")
+		cancel()
+		wg.Wait()
+		fmt.Println("\u2713Audio file created")
 		err = internals.ComposeSummary(audioName,summaryName)
 		if err!=nil{
 			panic(err)

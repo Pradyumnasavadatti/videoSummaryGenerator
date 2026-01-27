@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/spf13/cobra"
 )
@@ -11,6 +12,7 @@ var (
 	vidLocation string
 	audioName string = "audio.wav"
 	summaryName string = "summary.txt"
+	wg sync.WaitGroup
 );
 
 
@@ -18,10 +20,6 @@ var rootCmd = &cobra.Command{
 	Use: "vid",
 	Short: "Video summarizer",
 	Long: "This command will summarize the video which is powered by ai",
-
-	Run: func(cmd *cobra.Command, args []string) {
-		
-	},
 }
 
 func Execute() {

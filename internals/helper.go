@@ -1,12 +1,14 @@
 package internals
 
 import (
-	"log"
+	"fmt"
 	"os"
+	"sync"
 )
 
+var wg sync.WaitGroup
+
 func ComposeSummary(audioFile,summaryFile string)error{
-	log.Println("Call whisper api to get text from audio file")
 		text, err := GetSpeechToText(audioFile)
 		if err!=nil{
 			return err
@@ -16,6 +18,6 @@ func ComposeSummary(audioFile,summaryFile string)error{
 		if err!=nil{
 			return err
 		}
-		log.Printf("Successfully generated the transcripted into %v the audio",summaryFile)
+		fmt.Printf("\u2713Successfully generated the summary in %v",summaryFile)
 		return nil
 }
