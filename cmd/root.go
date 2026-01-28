@@ -30,5 +30,5 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&vidLocation,"file", "f", "file location", "file location to get the video")
+	rootCmd.PersistentFlags().StringVarP(&vidLocation,"file", "f", "file location", "file location to get the video/audio")
 }
