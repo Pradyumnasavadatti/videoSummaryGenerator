@@ -19,8 +19,8 @@ func GetSpeechToText(fileName string) (string, error){
 	}
 	defer filePtr.Close()
 	ctx2, cancel2 := context.WithCancel(context.Background())	
-	wg.Add(1)
-	go StartWithContext(ctx2,&wg,"Calling Wisper for audio transcripts")
+	Wg.Add(1)
+	go StartWithContext(ctx2,&Wg,"Calling Wisper for audio transcripts")
 	defer cancel2()
 	filePtr.Seek(0, io.SeekStart)
 	if apiKey, isPresent := os.LookupEnv("OPEN_AI_KEY"); isPresent{
@@ -33,7 +33,7 @@ func GetSpeechToText(fileName string) (string, error){
 			return "",err
 		}
 		cancel2()
-		wg.Wait()
+		Wg.Wait()
 		fmt.Println("\u2713Received the transcripts")
 		return response.Text, nil
 	}else{

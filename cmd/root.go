@@ -3,19 +3,10 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"sync"
 
 	"github.com/spf13/cobra"
 )
-
-var (
-	vidLocation string
-	audioName string = "audio.wav"
-	summaryName string = "summary.txt"
-	wg sync.WaitGroup
-);
-
-
+var vidLocation string
 var rootCmd = &cobra.Command{
 	Use: "vid",
 	Short: "Video summarizer",

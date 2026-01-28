@@ -3,10 +3,7 @@ package internals
 import (
 	"fmt"
 	"os"
-	"sync"
 )
-
-var wg sync.WaitGroup
 
 func ComposeSummary(audioFile,summaryFile string)error{
 		text, err := GetSpeechToText(audioFile)

@@ -13,8 +13,8 @@ import (
 func CallOpenAi(transcriptedText string)(string,error){
 	ctx, cancel := context.WithCancel(context.Background())	
 	defer cancel()
-	wg.Add(1)
-	go StartWithContext(ctx,&wg,"Getting summary from openai")
+	Wg.Add(1)
+	go StartWithContext(ctx,&Wg,"Getting summary from openai")
 	if apiKey,isPresent := os.LookupEnv("OPEN_AI_KEY"); isPresent{
 		client := openai.NewClient(option.WithAPIKey(apiKey))
 		prompt:= `
@@ -37,7 +37,7 @@ func CallOpenAi(transcriptedText string)(string,error){
 			panic(err)
 		}
 		cancel()
-		wg.Wait()
+		Wg.Wait()
 		fmt.Println("\u2713Generated the summary")
 		return res.Choices[0].Message.Content, nil;
 	}else{

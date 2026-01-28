@@ -18,8 +18,8 @@ var youtubeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx,cancel := context.WithCancel(context.Background())
 		defer cancel()
-		wg.Add(1)
-		go internals.StartWithContext(ctx,&wg,"Getting youtube video")
+		internals.Wg.Add(1)
+		go internals.StartWithContext(ctx,&internals.Wg,"Getting youtube video")
 		client := youtube.Client{}
 
 		vid, err := client.GetVideo(vidLocation);
@@ -40,9 +40,9 @@ var youtubeCmd = &cobra.Command{
 		defer stream.Close()
 
 		cancel()
-		wg.Wait()
+		internals.Wg.Wait()
 		fmt.Println("\u2713Saving youtube audio file")
-		fptr ,err := os.Create(audioName)
+		fptr ,err := os.Create(internals.AudioName)
 		if err!=nil{
 			panic(err)
 		}
@@ -54,7 +54,7 @@ var youtubeCmd = &cobra.Command{
 			panic(err)
 		}
 		fmt.Println("\u2713Audio file created")
-		err = internals.ComposeSummary(audioName,summaryName)
+		err = internals.ComposeSummary(internals.AudioName,internals.SummaryName)
 		if err!=nil{
 			panic(err)
 		}
