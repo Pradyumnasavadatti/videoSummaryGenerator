@@ -27,13 +27,20 @@ var youtubeCmd = &cobra.Command{
 		if err!=nil{
 			panic(err)
 		}
-		formats := vid.Formats.Type("audio").Language("English (US) original");
+		formats := vid.Formats.Type("audio");
 
 		if len(formats) == 0{
 			panic("No audio found for English language")
 		}
 
-		stream, _, err := client.GetStream(vid, &formats[0])
+		best := formats[0];
+		for _,format := range(formats){
+			if best.Bitrate < format.Bitrate{
+				best = format
+			}
+		}
+
+		stream, _, err := client.GetStream(vid, &best)
 		if err!=nil{
 			panic(err)
 		}

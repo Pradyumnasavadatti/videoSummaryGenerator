@@ -17,8 +17,6 @@ github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
 github.com/kkdai/youtube/v2 v2.10.5 h1:22v6qas+/gEhZVmkqAa8fBsLhUsJA5HPDA+mSFkUBwo=
 github.com/kkdai/youtube/v2 v2.10.5/go.mod h1:pm4RuJ2tRIIaOvz4YMIpCY8Ls4Fm7IVtnZQyule61MU=
-github.com/nmeilick/go-whisper v1.0.0 h1:jSkTiw1a/5TnZnUOlCt1wB4xW0S0HVlzF6q2oAdAPJ4=
-github.com/nmeilick/go-whisper v1.0.0/go.mod h1:vBfTahUP5XwX9oEG42Ee9w96RDktzOUkEIgdBed6opc=
 github.com/openai/openai-go/v3 v3.16.0 h1:VdqS+GFZgAvEOBcWNyvLVwPlYEIboW5xwiUCcLrVf8c=
 github.com/openai/openai-go/v3 v3.16.0/go.mod h1:cdufnVK14cWcT9qA1rRtrXx4FTRsgbDPW7Ia7SS5cZo=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
